@@ -1,0 +1,14 @@
+{
+  "name": "policypal-vercel",
+  "version": "1.0.0",
+  "description": "PolicyPal - AI-powered insurance policy analysis",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site - no build needed'",
+    "start": "npx serve ."
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0"
+  }
+}

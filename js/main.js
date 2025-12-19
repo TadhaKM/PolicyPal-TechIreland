@@ -382,11 +382,15 @@ function initSmoothScroll() {
 
 /**
  * PDF Upload Handler
- * Uploads to local backend and shows results
+ * Uploads to backend and shows results
+ * Works with both local dev (localhost:3000) and Vercel (/api)
  */
 function initPDFUpload() {
     const pdfUpload = document.getElementById('pdfUpload');
-    const API_URL = 'http://localhost:3000';
+
+    // Detect environment - use relative /api for Vercel, localhost for local dev
+    const isVercel = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+    const API_BASE = isVercel ? '' : 'http://localhost:3000';
 
     if (!pdfUpload) return;
 
@@ -409,40 +413,36 @@ function initPDFUpload() {
         uploadBtn.style.pointerEvents = 'none';
 
         try {
-            // Upload to backend
-            const formData = new FormData();
-            formData.append('file', file);
+            // Read PDF as text (for Vercel serverless)
+            const pdfText = await extractPdfText(file);
 
-            const response = await fetch(`${API_URL}/policies/upload`, {
+            // Send to API
+            const response = await fetch(`${API_BASE}/api/analyze`, {
                 method: 'POST',
-                body: formData,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pdfText, filename: file.name }),
             });
 
             if (!response.ok) {
-                throw new Error('Upload failed');
+                throw new Error('Analysis failed');
             }
 
             const result = await response.json();
-            console.log('Upload result:', result);
-
-            // Fetch dashboard data
-            const dashboardResponse = await fetch(`${API_URL}/policies/${result.policy.id}/dashboard`);
-            const dashboardData = await dashboardResponse.json();
+            console.log('Analysis result:', result);
 
             // Show results in modal
-            showDashboardModal(dashboardData.dashboard);
+            showDashboardModal(result.dashboard);
 
         } catch (error) {
             console.error('Upload error:', error);
 
-            // If backend not running, show demo
-            if (error.message.includes('fetch')) {
+            // If API not available, show demo
+            if (error.message.includes('fetch') || error.message.includes('Failed')) {
                 const useDemo = confirm(
-                    'Backend not running. Would you like to see a demo dashboard?\n\n' +
-                    'To run the backend:\n' +
-                    '1. cd backend-simple\n' +
-                    '2. npm install\n' +
-                    '3. npm start'
+                    'API not available. Would you like to see a demo dashboard?\n\n' +
+                    'For local development:\n' +
+                    '1. cd backend-simple && npm install && npm start\n\n' +
+                    'For Vercel: Deploy with ANTHROPIC_API_KEY env var'
                 );
 
                 if (useDemo) {
@@ -460,11 +460,52 @@ function initPDFUpload() {
 }
 
 /**
+ * Extract text from PDF file (client-side)
+ * Uses pdf.js library loaded from CDN
+ */
+async function extractPdfText(file) {
+    // Load pdf.js if not already loaded
+    if (!window.pdfjsLib) {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+    let fullText = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items.map(item => item.str).join(' ');
+        fullText += `\n--- Page ${i} ---\n${pageText}`;
+    }
+
+    return fullText;
+}
+
+/**
+ * Load external script dynamically
+ */
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+/**
  * Load demo dashboard from backend
  */
 async function loadDemoDashboard() {
+    const isVercel = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+    const demoUrl = isVercel ? '/api/demo' : 'http://localhost:3000/demo/dashboard';
+
     try {
-        const response = await fetch('http://localhost:3000/demo/dashboard');
+        const response = await fetch(demoUrl);
         const data = await response.json();
         showDashboardModal(data.dashboard);
     } catch (error) {
