@@ -1,0 +1,338 @@
+// PolicyPal Database Schema
+// Using Prisma ORM with PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// Users & Authentication
+// ============================================
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  hashedPassword String    @map("hashed_password")
+  firstName      String?   @map("first_name")
+  lastName       String?   @map("last_name")
+  plan           Plan      @default(FREE)
+  policyCount    Int       @default(0) @map("policy_count")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  lastLoginAt    DateTime? @map("last_login_at")
+
+  // Relations
+  policies       Policy[]
+  supportTickets SupportTicket[]
+
+  @@map("users")
+}
+
+enum Plan {
+  FREE
+  PREMIUM
+  ENTERPRISE
+}
+
+// ============================================
+// Policies
+// ============================================
+
+model Policy {
+  id                String       @id @default(uuid())
+  userId            String       @map("user_id")
+  sourceFileUrl     String       @map("source_file_url")
+  filename          String
+  fileSize          Int          @map("file_size")
+  mimeType          String       @default("application/pdf") @map("mime_type")
+  uploadedAt        DateTime     @default(now()) @map("uploaded_at")
+  policyType        PolicyType   @default(HOME) @map("policy_type")
+  status            PolicyStatus @default(UPLOADED)
+
+  // Extracted metadata
+  insurer           String?
+  productName       String?      @map("product_name")
+  policyNumber      String?      @map("policy_number")
+  periodStart       DateTime?    @map("period_start")
+  periodEnd         DateTime?    @map("period_end")
+
+  // Address information
+  addressRaw        String?      @map("address_raw")
+  addressNormalized String?      @map("address_normalized")
+  eircode           String?
+  latitude          Float?
+  longitude         Float?
+
+  // Processing info
+  pageCount         Int?         @map("page_count")
+  isScanned         Boolean      @default(false) @map("is_scanned")
+  processingError   String?      @map("processing_error")
+
+  createdAt         DateTime     @default(now()) @map("created_at")
+  updatedAt         DateTime     @updatedAt @map("updated_at")
+  deletedAt         DateTime?    @map("deleted_at")
+
+  // Relations
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  extracts          PolicyExtract[]
+  riskAssessments   RiskAssessment[]
+  guidanceRuns      GuidanceRun[]
+  jobs              Job[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("policies")
+}
+
+enum PolicyType {
+  HOME
+  MOTOR
+  COMMERCIAL
+  LIFE
+  HEALTH
+  OTHER
+}
+
+enum PolicyStatus {
+  UPLOADED
+  PROCESSING
+  EXTRACTING
+  ANALYZING
+  READY
+  ERROR
+  DELETED
+}
+
+// ============================================
+// Policy Extractions (versioned)
+// ============================================
+
+model PolicyExtract {
+  id               String   @id @default(uuid())
+  policyId         String   @map("policy_id")
+  modelVersion     String   @map("model_version") // e.g., "gpt-4-1106-preview"
+  pipelineVersion  String   @map("pipeline_version") // e.g., "v1.2.0"
+
+  // Structured extraction results
+  extractionJson   Json     @map("extraction_json")
+
+  // Confidence and quality metrics
+  confidenceScores Json?    @map("confidence_scores")
+  needsReview      Boolean  @default(false) @map("needs_review")
+  reviewNotes      String?  @map("review_notes")
+
+  // Token usage tracking
+  tokensUsed       Int?     @map("tokens_used")
+  processingTimeMs Int?     @map("processing_time_ms")
+
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  // Relations
+  policy           Policy   @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([policyId])
+  @@map("policy_extracts")
+}
+
+// ============================================
+// Risk Assessments (versioned)
+// ============================================
+
+model RiskAssessment {
+  id              String   @id @default(uuid())
+  policyId        String   @map("policy_id")
+
+  // Dataset versions used
+  datasetVersions Json     @map("dataset_versions")
+
+  // Risk check results
+  riskResultsJson Json     @map("risk_results_json")
+
+  // Location used for assessment
+  latitude        Float?
+  longitude       Float?
+  eircode         String?
+
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // Relations
+  policy          Policy   @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([policyId])
+  @@map("risk_assessments")
+}
+
+// ============================================
+// Guidance Runs (versioned)
+// ============================================
+
+model GuidanceRun {
+  id             String   @id @default(uuid())
+  policyId       String   @map("policy_id")
+  rulesetVersion String   @map("ruleset_version")
+  inputsHash     String   @map("inputs_hash") // For determinism verification
+
+  // Guidance outputs
+  guidanceJson   Json     @map("guidance_json")
+
+  // Statistics
+  gapsCount      Int      @default(0) @map("gaps_count")
+  actionsCount   Int      @default(0) @map("actions_count")
+  questionsCount Int      @default(0) @map("questions_count")
+
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // Relations
+  policy         Policy   @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([policyId])
+  @@map("guidance_runs")
+}
+
+// ============================================
+// Jobs (async processing)
+// ============================================
+
+model Job {
+  id           String    @id @default(uuid())
+  policyId     String    @map("policy_id")
+  type         JobType
+  status       JobStatus @default(QUEUED)
+
+  // Progress tracking
+  progress     Int       @default(0) // 0-100
+  phase        String?   // Current phase description
+
+  // Error handling
+  errorMessage String?   @map("error_message")
+  errorStack   String?   @map("error_stack")
+  retryCount   Int       @default(0) @map("retry_count")
+
+  // Timing
+  startedAt    DateTime? @map("started_at")
+  completedAt  DateTime? @map("completed_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  policy       Policy    @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([policyId])
+  @@index([status])
+  @@map("jobs")
+}
+
+enum JobType {
+  ANALYZE
+  REANALYZE
+  RISK_CHECK
+  EXPORT
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+// ============================================
+// Rulesets (for version control)
+// ============================================
+
+model Ruleset {
+  id          String   @id @default(uuid())
+  version     String   @unique // e.g., "2025_12_19"
+  name        String
+  description String?
+  rulesJson   Json     @map("rules_json")
+  isActive    Boolean  @default(false) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  createdBy   String?  @map("created_by")
+
+  @@map("rulesets")
+}
+
+// ============================================
+// Dataset Metadata (for tracking versions)
+// ============================================
+
+model DatasetMetadata {
+  id            String   @id @default(uuid())
+  datasetType   String   @map("dataset_type") // flood, crime, erosion, etc.
+  version       String
+  sourceUrl     String   @map("source_url")
+  license       String?
+  retrievedAt   DateTime @map("retrieved_at")
+  recordCount   Int?     @map("record_count")
+  checksum      String?
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@unique([datasetType, version])
+  @@map("dataset_metadata")
+}
+
+// ============================================
+// Support Tickets (Premium feature)
+// ============================================
+
+model SupportTicket {
+  id          String       @id @default(uuid())
+  userId      String       @map("user_id")
+  subject     String
+  message     String
+  priority    TicketPriority @default(NORMAL)
+  status      TicketStatus @default(OPEN)
+  policyId    String?      @map("policy_id")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  resolvedAt  DateTime?    @map("resolved_at")
+
+  // Relations
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("support_tickets")
+}
+
+enum TicketPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING
+  RESOLVED
+  CLOSED
+}
+
+// ============================================
+// Audit Logs
+// ============================================
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?  @map("user_id")
+  action     String
+  resource   String
+  resourceId String?  @map("resource_id")
+  details    Json?
+  ipAddress  String?  @map("ip_address")
+  userAgent  String?  @map("user_agent")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
