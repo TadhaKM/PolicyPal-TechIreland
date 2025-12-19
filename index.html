@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolicyPal - Your Coverage, Your Way</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#home" class="logo">
+                    <img src="assets/logo.svg" alt="PolicyPal Logo" class="logo-img">
+                    <span class="logo-text">PolicyPal</span>
+                </a>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="#home" class="nav-link active">Home</a></li>
+                        <li><a href="#about" class="nav-link">About</a></li>
+                        <li><a href="#solutions" class="nav-link">Solutions</a></li>
+                        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+                        <li><a href="#faq" class="nav-link">FAQ</a></li>
+                    </ul>
+                </nav>
+                <button class="btn btn-primary" id="getQuoteBtn">Get A Quote</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-list">
+            <li><a href="#home" class="mobile-nav-link">Home</a></li>
+            <li><a href="#about" class="mobile-nav-link">About</a></li>
+            <li><a href="#solutions" class="mobile-nav-link">Solutions</a></li>
+            <li><a href="#pricing" class="mobile-nav-link">Pricing</a></li>
+            <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
+            <li><button class="btn btn-primary mobile-quote-btn" id="mobileGetQuoteBtn">Get A Quote</button></li>
+        </ul>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 class="modal-title">Contact Us Now!</h2>
+            <p class="modal-subtitle">Get a personalized quote for your insurance needs</p>
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Tell us about your insurance needs..." rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Submit</button>
+            </form>
+            <p class="modal-footer-text">We'll get back to you within 24 hours</p>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    PolicyPal, for Your Coverage, Your Way...
+                    <span class="highlight">No Hidden Jargon</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Upload your insurance policy and get instant, AI-powered analysis with clear explanations of what's covered, what's not, and what you should ask your broker.
+                </p>
+                <div class="hero-cta">
+                    <label for="pdfUpload" class="btn btn-primary btn-large">
+                        <i class="fas fa-upload"></i> Upload your PDF
+                    </label>
+                    <input type="file" id="pdfUpload" accept=".pdf" hidden>
+                    <a href="#about" class="btn btn-secondary btn-large">Learn More</a>
+                </div>
+                <div class="hero-trust">
+                    <span><i class="fas fa-shield-alt"></i> Secure & Private</span>
+                    <span><i class="fas fa-clock"></i> Results in 90 seconds</span>
+                    <span><i class="fas fa-check-circle"></i> No signup required</span>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="card-header">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Policy Analysis</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="analysis-item">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Buildings Coverage: €350,000</span>
+                        </div>
+                        <div class="analysis-item">
+                            <i class="fas fa-check text-success"></i>
+                            <span>Contents Coverage: €75,000</span>
+                        </div>
+                        <div class="analysis-item warning">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                            <span>Flood Risk: High - Not Covered</span>
+                        </div>
+                        <div class="analysis-item">
+                            <i class="fas fa-info-circle text-info"></i>
+                            <span>3 Questions for your broker</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </section>
+
+    <!-- Testimonial Slider -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="slider" id="testimonialSlider">
+                <div class="slider-track">
+                    <div class="slide active">
+                        <div class="slide-content">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <p class="quote-text">"62% of consumers don't fully understand their insurance policy terms and conditions, leading to unexpected claim rejections."</p>
+                            <div class="quote-source">
+                                <strong>Which?</strong>
+                                <span>Consumer Research, 2025</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-content">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <p class="quote-text">"Insurance complexity is one of the top barriers to consumer protection. Clear, accessible policy information is essential for informed decision-making."</p>
+                            <div class="quote-source">
+                                <strong>EIOPA</strong>
+                                <span>European Insurance Report, 2024</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-content">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <p class="quote-text">"AI-powered document analysis can reduce policy review time by up to 80% while improving accuracy in identifying coverage gaps and exclusions."</p>
+                            <div class="quote-source">
+                                <strong>Indicodata AI</strong>
+                                <span>Insurance Technology Report, 2024</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-btn prev" id="sliderPrev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="slider-dots" id="sliderDots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                    </div>
+                    <button class="slider-btn next" id="sliderNext">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">About Us</span>
+                <h2 class="section-title">What is PolicyPal?</h2>
+                <p class="section-subtitle">Your AI-powered insurance policy companion that makes complex documents simple</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>PolicyPal is an intelligent insurance analysis platform that uses advanced AI to decode your policy documents. We extract the essential information, highlight potential coverage gaps, and cross-reference your policy against real-world risk data - all in under 90 seconds.</p>
+                    <p>Our hybrid intelligence approach combines the power of AI with deterministic rules to provide you with practical, actionable guidance - not just summaries.</p>
+                    <h3>Who is PolicyPal for?</h3>
+                    <ul class="about-list">
+                        <li>
+                            <i class="fas fa-user"></i>
+                            <span><strong>Consumers</strong> who want to understand what they're actually covered for</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-chart-line"></i>
+                            <span><strong>Investors & Property Owners</strong> managing multiple policies across portfolios</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-building"></i>
+                            <span><strong>SMB Owners</strong> ensuring their business is properly protected</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-balance-scale"></i>
+                            <span><strong>Legal & Financial Advisors</strong> reviewing client coverage</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-handshake"></i>
+                            <span><strong>Insurance Brokers</strong> streamlining policy comparisons and reviews</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="about-visual">
+                    <div class="feature-cards">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4>AI-Powered Analysis</h4>
+                            <p>Advanced language models extract and structure policy information</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <h4>Risk Cross-Check</h4>
+                            <p>Live government data integration for flood, crime, and location risks</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <h4>Action Plan</h4>
+                            <p>Clear recommendations and questions to ask your broker</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h4>Secure & Private</h4>
+                            <p>Your documents are processed securely and never shared</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section class="solutions" id="solutions">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Solutions</span>
+                <h2 class="section-title">How PolicyPal Protects You</h2>
+                <p class="section-subtitle">Comprehensive tools for understanding and maximizing your insurance coverage</p>
+            </div>
+            <div class="solutions-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <h3>Ensuring the Protection of Agency Rights</h3>
+                    <p>Insurance policies are legal contracts, and understanding your rights is crucial. PolicyPal identifies:</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Key coverage terms and conditions</li>
+                        <li><i class="fas fa-check"></i> Exclusions that could affect your claims</li>
+                        <li><i class="fas fa-check"></i> Your obligations and requirements</li>
+                        <li><i class="fas fa-check"></i> Potential areas where you may be underinsured</li>
+                    </ul>
+                    <p class="solution-note">We empower you with knowledge to have informed conversations with your insurer or broker.</p>
+                </div>
+                <div class="solution-card premium">
+                    <div class="premium-badge">Premium</div>
+                    <div class="solution-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>PolicyPal Premium</h3>
+                    <p>Take your insurance management to the next level with advanced features designed for power users:</p>
+                    <ul>
+                        <li><i class="fas fa-star"></i> Multi-policy analysis and comparison</li>
+                        <li><i class="fas fa-star"></i> Advanced Risk Radar with real-time data</li>
+                        <li><i class="fas fa-star"></i> Priority claim assistance support</li>
+                        <li><i class="fas fa-star"></i> Custom action plans and reminders</li>
+                        <li><i class="fas fa-star"></i> Advanced dashboard analytics</li>
+                        <li><i class="fas fa-star"></i> API access for integrations</li>
+                    </ul>
+                    <a href="#pricing" class="btn btn-primary">View Pricing</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Pricing</span>
+                <h2 class="section-title">Choose Your Plan</h2>
+                <p class="section-subtitle">Start free and upgrade when you need more power</p>
+            </div>
+            <div class="pricing-table-wrapper">
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th class="feature-col">Features</th>
+                            <th class="plan-col free">
+                                <div class="plan-header">
+                                    <span class="plan-name">Free</span>
+                                    <span class="plan-price">€0</span>
+                                    <span class="plan-period">forever</span>
+                                </div>
+                            </th>
+                            <th class="plan-col premium">
+                                <div class="plan-header">
+                                    <span class="plan-badge">Most Popular</span>
+                                    <span class="plan-name">Premium</span>
+                                    <span class="plan-price">€9.99</span>
+                                    <span class="plan-period">per month</span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Upload & Analyze Policy</td>
+                            <td><span class="limit">1 policy</span></td>
+                            <td><i class="fas fa-check text-success"></i> Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Technical Dashboard</td>
+                            <td><i class="fas fa-check text-success"></i> Basic</td>
+                            <td><i class="fas fa-check text-success"></i> Advanced</td>
+                        </tr>
+                        <tr>
+                            <td>Claim Assistant</td>
+                            <td><i class="fas fa-check text-success"></i> Basic</td>
+                            <td><i class="fas fa-check text-success"></i> Advanced with AI</td>
+                        </tr>
+                        <tr>
+                            <td>Risk Radar</td>
+                            <td><i class="fas fa-times text-muted"></i></td>
+                            <td><i class="fas fa-check text-success"></i> Full Access</td>
+                        </tr>
+                        <tr>
+                            <td>Action Plan Generator</td>
+                            <td><i class="fas fa-times text-muted"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Multi-Policy Analysis</td>
+                            <td><i class="fas fa-times text-muted"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Priority Support</td>
+                            <td><i class="fas fa-times text-muted"></i></td>
+                            <td><i class="fas fa-check text-success"></i> 24/7</td>
+                        </tr>
+                        <tr>
+                            <td>Advanced Dashboard Analytics</td>
+                            <td><i class="fas fa-times text-muted"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr class="cta-row">
+                            <td></td>
+                            <td>
+                                <button class="btn btn-secondary">Get Started</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary">Start Free Trial</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-euro-sign"></i>
+                    </div>
+                    <div class="stat-value">
+                        <span class="stat-prefix">€</span>
+                        <span class="counter" data-target="4.2">0</span>
+                        <span class="stat-suffix">B</span>
+                    </div>
+                    <div class="stat-label">Annual Market</div>
+                    <div class="stat-sublabel">Irish Home & Motor Insurance</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value">
+                        <span class="counter" data-target="2.1">0</span>
+                        <span class="stat-suffix">M+</span>
+                    </div>
+                    <div class="stat-label">Potential Clients</div>
+                    <div class="stat-sublabel">Homeowners & Drivers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="stat-value">
+                        <span class="counter" data-target="10">0</span>
+                        <span class="stat-suffix">x</span>
+                    </div>
+                    <div class="stat-label">Faster Policy Analysis</div>
+                    <div class="stat-sublabel">Compared to Manual Review</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="stat-value">
+                        <span class="counter" data-target="73">0</span>
+                        <span class="stat-suffix">%</span>
+                    </div>
+                    <div class="stat-label">Crime Risk Identified</div>
+                    <div class="stat-sublabel">Coverage Gaps Found</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Get Involved / Change Your Workflow</h2>
+                <p>Join thousands of users who have already transformed how they understand and manage their insurance policies. Start your journey to clarity today.</p>
+                <div class="cta-buttons">
+                    <a href="https://policypal-app.vercel.app" target="_blank" class="btn btn-primary btn-large">
+                        <i class="fas fa-rocket"></i> Get Started
+                    </a>
+                    <button class="btn btn-outline btn-large" id="ctaContactBtn">
+                        <i class="fas fa-envelope"></i> Contact Sales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">FAQ</span>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-subtitle">Everything you need to know about PolicyPal</p>
+            </div>
+            <div class="faq-accordion" id="faqAccordion">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What are the main benefits of using PolicyPal?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>PolicyPal offers several key benefits:</p>
+                        <ul>
+                            <li><strong>Time Savings:</strong> Get comprehensive policy analysis in under 90 seconds instead of hours of manual reading</li>
+                            <li><strong>Clarity:</strong> Complex insurance jargon translated into plain English</li>
+                            <li><strong>Risk Awareness:</strong> Identify coverage gaps before they become costly claim rejections</li>
+                            <li><strong>Informed Decisions:</strong> Know exactly what questions to ask your broker</li>
+                            <li><strong>Peace of Mind:</strong> Understand what you're actually paying for</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What is Risk Radar and how does it work?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Risk Radar is our advanced feature that cross-references your policy coverage against real-world risk data:</p>
+                        <ul>
+                            <li><strong>Flood Risk:</strong> We check your property location against government flood maps</li>
+                            <li><strong>Crime Statistics:</strong> Local crime data helps identify if your contents coverage is adequate</li>
+                            <li><strong>Coastal Erosion:</strong> For coastal properties, we check erosion risk data</li>
+                            <li><strong>Subsidence Risk:</strong> Ground stability data for relevant areas</li>
+                        </ul>
+                        <p>If your policy excludes something that's a real risk for your property, we'll flag it immediately.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Is my data secure? How do you handle my policy documents?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Security and privacy are our top priorities:</p>
+                        <ul>
+                            <li><strong>Encryption:</strong> All documents are encrypted in transit (TLS) and at rest</li>
+                            <li><strong>Stateless Processing:</strong> We don't store your original documents longer than necessary for analysis</li>
+                            <li><strong>No Sharing:</strong> Your data is never sold or shared with third parties</li>
+                            <li><strong>GDPR Compliant:</strong> Full compliance with European data protection regulations</li>
+                            <li><strong>Audit Logs:</strong> Complete transparency on how your data is processed</li>
+                        </ul>
+                        <p>You can request deletion of your data at any time.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>How do I use PolicyPal?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Using PolicyPal is simple:</p>
+                        <ol>
+                            <li><strong>Upload:</strong> Click "Upload your PDF" and select your insurance policy document</li>
+                            <li><strong>Wait:</strong> Our AI analyzes your policy in under 90 seconds</li>
+                            <li><strong>Review:</strong> Explore your personalized dashboard showing coverage, exclusions, and recommendations</li>
+                            <li><strong>Act:</strong> Use our generated action plan and questions for your broker</li>
+                        </ol>
+                        <p>No signup is required for the free tier - just upload and get instant results.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What is the "Hybrid Intelligence" model you use?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Our Hybrid Intelligence approach combines the best of both worlds:</p>
+                        <ul>
+                            <li><strong>AI/LLM Component:</strong> Advanced language models (similar to GPT-4) extract and understand policy text, handling the nuances of insurance language</li>
+                            <li><strong>Rules Engine:</strong> Deterministic, explainable rules that produce consistent, auditable recommendations</li>
+                        </ul>
+                        <p>Why hybrid? Pure AI can sometimes hallucinate or produce inconsistent results. Pure rules can't handle the variety of insurance document formats. By combining them:</p>
+                        <ul>
+                            <li>AI handles extraction and understanding</li>
+                            <li>Rules ensure every recommendation is traceable and consistent</li>
+                            <li>Every output includes citations and evidence</li>
+                            <li>Results are reproducible and auditable</li>
+                        </ul>
+                        <p>This approach gives you the flexibility of AI with the reliability of traditional software.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#home" class="logo">
+                        <img src="assets/logo.svg" alt="PolicyPal Logo" class="logo-img">
+                        <span class="logo-text">PolicyPal</span>
+                    </a>
+                    <p>Making insurance understandable for everyone. AI-powered policy analysis that puts you in control.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/policypal" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://twitter.com/policypal" target="_blank" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/policypal" target="_blank" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#solutions">Solutions</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Risk Radar</a></li>
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">Integrations</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Help</h4>
+                    <ul>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">GDPR</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 PolicyPal. All rights reserved.</p>
+                <p>Made with <i class="fas fa-heart"></i> in Ireland</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
