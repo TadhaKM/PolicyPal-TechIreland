@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Home Insurance Policy - Allianz Ireland</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #003366;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo { font-size: 28pt; font-weight: bold; color: #003366; }
+        .policy-title { font-size: 18pt; margin-top: 10px; color: #666; }
+        h1 { font-size: 16pt; color: #003366; margin: 25px 0 15px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        h2 { font-size: 13pt; color: #003366; margin: 20px 0 10px; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f5f5f5; font-weight: bold; }
+        .amount { text-align: right; font-weight: bold; }
+        .section { margin-bottom: 25px; }
+        ul { margin-left: 25px; margin-top: 10px; }
+        li { margin-bottom: 5px; }
+        .warning { background: #fff3cd; padding: 10px; border-left: 4px solid #ffc107; margin: 15px 0; }
+        .important { background: #f8d7da; padding: 10px; border-left: 4px solid #dc3545; margin: 15px 0; }
+        .page-break { page-break-after: always; }
+        .footer { margin-top: 40px; text-align: center; font-size: 9pt; color: #666; border-top: 1px solid #ccc; padding-top: 20px; }
+        @media print {
+            body { padding: 20px; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="no-print" style="background:#003366;color:#fff;padding:15px;margin-bottom:20px;border-radius:8px;">
+    <strong>Instructions:</strong> To create a PDF, press Ctrl+P (or Cmd+P on Mac) and select "Save as PDF"<br>
+    Or use this to test the PolicyPal analyzer!
+</div>
+
+<div class="header">
+    <div class="logo">ALLIANZ</div>
+    <div class="policy-title">Home Insurance Policy Document</div>
+</div>
+
+<div class="section">
+    <h1>Policy Schedule</h1>
+    <table>
+        <tr><th width="40%">Policy Number</th><td>HI-2025-78432-IRE</td></tr>
+        <tr><th>Policyholder</th><td>Mr. John Murphy & Mrs. Mary Murphy</td></tr>
+        <tr><th>Property Address</th><td>42 Oakwood Drive, Blackrock, Co. Dublin, A94 T8F2</td></tr>
+        <tr><th>Policy Period</th><td>1st January 2025 to 31st December 2025</td></tr>
+        <tr><th>Product Name</th><td>Home Insurance Plus</td></tr>
+        <tr><th>Annual Premium</th><td class="amount">€685.00</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h1>Section 1: Buildings Cover</h1>
+    <table>
+        <tr><th>Cover</th><th>Sum Insured</th><th>Excess</th></tr>
+        <tr><td>Buildings (Rebuild Cost)</td><td class="amount">€450,000</td><td class="amount">€250</td></tr>
+        <tr><td>Outbuildings</td><td class="amount">€25,000</td><td class="amount">€250</td></tr>
+        <tr><td>Alternative Accommodation</td><td class="amount">€25,000</td><td class="amount">Nil</td></tr>
+    </table>
+
+    <h2>What is Covered</h2>
+    <ul>
+        <li>Loss or damage to the buildings caused by fire, lightning, explosion, earthquake</li>
+        <li>Storm or flood damage (subject to exclusions below)</li>
+        <li>Theft or attempted theft</li>
+        <li>Escape of water from fixed water or heating systems</li>
+        <li>Impact by vehicles or aircraft</li>
+        <li>Malicious damage and vandalism</li>
+        <li>Subsidence, heave or landslip (subject to £1,000 excess)</li>
+    </ul>
+</div>
+
+<div class="page-break"></div>
+
+<div class="section">
+    <h1>Section 2: Contents Cover</h1>
+    <table>
+        <tr><th>Cover</th><th>Sum Insured</th><th>Excess</th></tr>
+        <tr><td>Contents (New for Old)</td><td class="amount">€75,000</td><td class="amount">€250</td></tr>
+        <tr><td>Personal Possessions (Worldwide)</td><td class="amount">€5,000</td><td class="amount">€100</td></tr>
+        <tr><td>Money in the Home</td><td class="amount">€500</td><td class="amount">€50</td></tr>
+    </table>
+
+    <h2>Sub-Limits</h2>
+    <table>
+        <tr><th>Item</th><th>Maximum Limit</th></tr>
+        <tr><td>Single Article Limit</td><td class="amount">€3,000</td></tr>
+        <tr><td>Valuables (total)</td><td class="amount">€15,000</td></tr>
+        <tr><td>Computer Equipment</td><td class="amount">€5,000</td></tr>
+        <tr><td>Garden Items</td><td class="amount">€2,500</td></tr>
+        <tr><td>Contents in Outbuildings</td><td class="amount">€5,000</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h1>Section 3: Liability Cover</h1>
+    <table>
+        <tr><th>Cover</th><th>Limit of Indemnity</th></tr>
+        <tr><td>Public Liability</td><td class="amount">€2,600,000</td></tr>
+        <tr><td>Employer's Liability (Domestic Employees)</td><td class="amount">€13,000,000</td></tr>
+    </table>
+</div>
+
+<div class="page-break"></div>
+
+<div class="section">
+    <h1>General Exclusions</h1>
+
+    <div class="important">
+        <h2>Flood Exclusion</h2>
+        <p>We do not cover loss or damage caused by flood, including but not limited to:</p>
+        <ul>
+            <li>Rising water levels from rivers, lakes, or seas</li>
+            <li>Surface water runoff</li>
+            <li>Water escaping from natural water courses</li>
+        </ul>
+        <p><strong>Note:</strong> Flood cover may be available as an optional endorsement - please contact your broker.</p>
+    </div>
+
+    <h2>We do not cover:</h2>
+    <ul>
+        <li><strong>Wear and tear, gradual deterioration</strong> - including rot, rust, mould, fungus, or gradual deterioration</li>
+        <li><strong>Mechanical or electrical breakdown</strong> - unless caused by an insured event</li>
+        <li><strong>Insects, vermin or pests</strong> - damage caused by insects, rodents, or other pests</li>
+        <li><strong>War and terrorism</strong> - loss arising from war, invasion, or act of terrorism</li>
+        <li><strong>Nuclear risks</strong> - any loss caused by nuclear reaction or radiation</li>
+        <li><strong>Pollution and contamination</strong> - unless caused by an insured event</li>
+        <li><strong>Sonic bangs</strong> - pressure waves from aircraft travelling at supersonic speeds</li>
+        <li><strong>Confiscation</strong> - by customs or government authorities</li>
+        <li><strong>Business use</strong> - any loss arising from business activities conducted at the property</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h1>General Conditions</h1>
+
+    <div class="warning">
+        <h2>Unoccupancy Clause</h2>
+        <p>If Your Home is left unoccupied for more than <strong>60 consecutive days</strong>:</p>
+        <ul>
+            <li>Cover for escape of water, theft, and malicious damage is excluded</li>
+            <li>You must notify us before the period of unoccupancy begins</li>
+            <li>All water supplies must be turned off at the mains</li>
+        </ul>
+    </div>
+
+    <h2>Security Requirements</h2>
+    <p>You must ensure the following security measures are in place:</p>
+    <ul>
+        <li>All external doors must be fitted with 5-lever mortice deadlocks or equivalent</li>
+        <li>All accessible windows must be fitted with key-operated locks</li>
+        <li>If specified in your schedule, a burglar alarm must be maintained in working order</li>
+    </ul>
+
+    <h2>Reasonable Care</h2>
+    <p>You must:</p>
+    <ul>
+        <li>Take all reasonable precautions to prevent loss, damage, or injury</li>
+        <li>Maintain the buildings and contents in good condition</li>
+        <li>Comply with all statutory requirements and regulations</li>
+    </ul>
+</div>
+
+<div class="page-break"></div>
+
+<div class="section">
+    <h1>How to Make a Claim</h1>
+    <p>In the event of a claim, please:</p>
+    <ol>
+        <li>Contact our 24-hour claims helpline: <strong>1800 778 877</strong></li>
+        <li>Report any theft or malicious damage to the Gardaí within 24 hours</li>
+        <li>Take reasonable steps to minimise further loss or damage</li>
+        <li>Keep damaged items for our inspection</li>
+        <li>Provide all documentation and evidence we reasonably require</li>
+    </ol>
+</div>
+
+<div class="section">
+    <h1>Definitions</h1>
+    <table>
+        <tr><th width="30%">Term</th><th>Definition</th></tr>
+        <tr><td><strong>Buildings</strong></td><td>The private dwelling house at the address shown in the schedule, including permanent fixtures and fittings, walls, gates, fences, paths, drives, swimming pools, tennis courts and satellite dishes.</td></tr>
+        <tr><td><strong>Contents</strong></td><td>Household goods, personal belongings, and valuables owned by you or your family, normally kept at the home.</td></tr>
+        <tr><td><strong>Flood</strong></td><td>Water which enters the buildings as a result of a natural event, including rising water levels from rivers, lakes, reservoirs, or the sea.</td></tr>
+        <tr><td><strong>Unoccupied</strong></td><td>Not lived in by you or your family for more than 60 consecutive days.</td></tr>
+        <tr><td><strong>Valuables</strong></td><td>Jewellery, watches, furs, items made of gold, silver or precious metals, works of art, collections and curios.</td></tr>
+    </table>
+</div>
+
+<div class="footer">
+    <p>Allianz plc, Allianz House, Elmpark, Merrion Road, Dublin 4, Ireland</p>
+    <p>Allianz plc is regulated by the Central Bank of Ireland. Registration No. 143108</p>
+    <p>Policy Document Reference: HI-PLUS-2025-V3</p>
+    <p><em>This is a sample policy for demonstration purposes only</em></p>
+</div>
+
+</body>
+</html>
