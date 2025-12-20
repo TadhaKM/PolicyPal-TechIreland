@@ -564,7 +564,7 @@ function getMockDashboard() {
 }
 
 /**
- * Show dashboard in modal
+ * Show dashboard in modal with charts
  */
 function showDashboardModal(dashboard) {
     // Remove existing dashboard modal if any
@@ -577,7 +577,7 @@ function showDashboardModal(dashboard) {
     modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:3000;overflow-y:auto;padding:20px;';
 
     modal.innerHTML = `
-        <div style="background:#fff;max-width:900px;margin:20px auto;border-radius:16px;overflow:hidden;">
+        <div style="background:#fff;max-width:1000px;margin:20px auto;border-radius:16px;overflow:hidden;">
             <!-- Header -->
             <div style="background:linear-gradient(135deg,#2563eb,#06b6d4);color:#fff;padding:24px;position:relative;">
                 <button onclick="document.getElementById('dashboardModal').remove()"
@@ -601,6 +601,34 @@ function showDashboardModal(dashboard) {
                 </div>
             </div>
 
+            <!-- Charts Section -->
+            <div style="padding:24px;border-bottom:1px solid #e5e7eb;">
+                <h3 style="margin:0 0 20px;">📊 Visual Analysis</h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;">
+                    <!-- Coverage Breakdown Doughnut Chart -->
+                    <div style="background:#f8fafc;padding:20px;border-radius:12px;">
+                        <h4 style="margin:0 0 16px;text-align:center;color:#374151;">Coverage Breakdown</h4>
+                        <div style="position:relative;height:220px;">
+                            <canvas id="coverageChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Risk Assessment Radar Chart -->
+                    <div style="background:#f8fafc;padding:20px;border-radius:12px;">
+                        <h4 style="margin:0 0 16px;text-align:center;color:#374151;">Risk Assessment</h4>
+                        <div style="position:relative;height:220px;">
+                            <canvas id="riskChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- Exclusions Severity Bar Chart -->
+                <div style="background:#f8fafc;padding:20px;border-radius:12px;margin-top:24px;">
+                    <h4 style="margin:0 0 16px;text-align:center;color:#374151;">Exclusions by Severity</h4>
+                    <div style="position:relative;height:200px;">
+                        <canvas id="exclusionsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
             <!-- Gaps & Actions -->
             ${dashboard.gaps?.length > 0 ? `
             <div style="padding:24px;border-bottom:1px solid #e5e7eb;">
@@ -617,9 +645,9 @@ function showDashboardModal(dashboard) {
             </div>
             ` : ''}
 
-            <!-- Risk Radar -->
+            <!-- Risk Radar Cards -->
             <div style="padding:24px;border-bottom:1px solid #e5e7eb;">
-                <h3 style="margin:0 0 16px;">🎯 Risk Radar</h3>
+                <h3 style="margin:0 0 16px;">🎯 Risk Radar Details</h3>
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
                     ${(dashboard.riskRadar || []).map(risk => `
                         <div style="background:#f8fafc;padding:16px;border-radius:8px;border-left:4px solid ${
@@ -633,9 +661,9 @@ function showDashboardModal(dashboard) {
                 </div>
             </div>
 
-            <!-- Coverage -->
+            <!-- Coverage Table -->
             <div style="padding:24px;border-bottom:1px solid #e5e7eb;">
-                <h3 style="margin:0 0 16px;">📋 Coverage Breakdown</h3>
+                <h3 style="margin:0 0 16px;">📋 Coverage Details</h3>
                 <table style="width:100%;border-collapse:collapse;">
                     <thead>
                         <tr style="background:#f8fafc;">
@@ -705,6 +733,9 @@ function showDashboardModal(dashboard) {
 
     document.body.appendChild(modal);
 
+    // Initialize charts after modal is added to DOM
+    setTimeout(() => initDashboardCharts(dashboard), 100);
+
     // Close on background click
     modal.addEventListener('click', (e) => {
         if (e.target === modal) modal.remove();
@@ -718,6 +749,198 @@ function showDashboardModal(dashboard) {
         }
     };
     document.addEventListener('keydown', handleEscape);
+}
+
+/**
+ * Initialize charts for the dashboard
+ */
+function initDashboardCharts(dashboard) {
+    // Parse currency strings to numbers
+    const parseCurrency = (str) => {
+        if (!str) return 0;
+        const match = str.match(/[\d,]+/);
+        return match ? parseInt(match[0].replace(/,/g, ''), 10) : 0;
+    };
+
+    // Coverage Breakdown Doughnut Chart
+    const coverageCtx = document.getElementById('coverageChart');
+    if (coverageCtx && dashboard.coverageBreakdown?.length) {
+        const coverageData = dashboard.coverageBreakdown.filter(c => c.limit).map(c => ({
+            name: c.name,
+            value: parseCurrency(c.limit)
+        }));
+
+        new Chart(coverageCtx, {
+            type: 'doughnut',
+            data: {
+                labels: coverageData.map(d => d.name),
+                datasets: [{
+                    data: coverageData.map(d => d.value),
+                    backgroundColor: [
+                        '#2563eb',
+                        '#06b6d4',
+                        '#10b981',
+                        '#8b5cf6',
+                        '#f59e0b',
+                        '#ec4899'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 16,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.raw;
+                                return `${context.label}: €${value.toLocaleString()}`;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    }
+
+    // Risk Assessment Bar Chart
+    const riskCtx = document.getElementById('riskChart');
+    if (riskCtx && dashboard.riskRadar?.length) {
+        const riskLevelToValue = { 'Low': 1, 'Medium': 2, 'High': 3 };
+        const riskColors = {
+            'Low': '#10b981',
+            'Medium': '#f59e0b',
+            'High': '#dc2626'
+        };
+
+        const riskData = dashboard.riskRadar.map(r => ({
+            type: r.riskType.charAt(0).toUpperCase() + r.riskType.slice(1),
+            level: r.level,
+            value: riskLevelToValue[r.level] || 1
+        }));
+
+        new Chart(riskCtx, {
+            type: 'bar',
+            data: {
+                labels: riskData.map(d => d.type),
+                datasets: [{
+                    label: 'Risk Level',
+                    data: riskData.map(d => d.value),
+                    backgroundColor: riskData.map(d => riskColors[d.level] || '#94a3b8'),
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const levels = ['', 'Low', 'Medium', 'High'];
+                                return `Risk Level: ${levels[context.raw]}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 3,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function(value) {
+                                const levels = ['', 'Low', 'Medium', 'High'];
+                                return levels[value] || '';
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Exclusions Severity Chart
+    const exclusionsCtx = document.getElementById('exclusionsChart');
+    if (exclusionsCtx && dashboard.exclusions?.length) {
+        const severityCount = { high: 0, medium: 0, low: 0 };
+        dashboard.exclusions.forEach(e => {
+            if (severityCount.hasOwnProperty(e.severity)) {
+                severityCount[e.severity]++;
+            }
+        });
+
+        new Chart(exclusionsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['High Severity', 'Medium Severity', 'Low Severity'],
+                datasets: [{
+                    label: 'Number of Exclusions',
+                    data: [severityCount.high, severityCount.medium, severityCount.low],
+                    backgroundColor: ['#dc2626', '#f59e0b', '#10b981'],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.raw} exclusion${context.raw !== 1 ? 's' : ''}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        },
+                        grid: {
+                            color: '#f1f5f9'
+                        }
+                    }
+                }
+            }
+        });
+    }
 }
 
 /**
