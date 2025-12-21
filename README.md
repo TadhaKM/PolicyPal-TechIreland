@@ -21,35 +21,6 @@ PolicyPal helps you understand your insurance policies by analyzing PDFs and pro
 - Works offline with demo mode
 - Deployable to Vercel or run locally
 
-## Quick Start
-
-### Option 1: Static Site (Demo Mode)
-
-Simply open `index.html` in your browser. Upload any PDF and click "OK" when prompted to see the demo dashboard.
-
-### Option 2: Local Development with Backend
-
-```bash
-# Install and run the backend
-cd backend-simple
-npm install
-npm start
-
-# Open index.html in your browser
-# The frontend will connect to localhost:3000
-```
-
-Set your Claude API key:
-```bash
-export ANTHROPIC_API_KEY=your-api-key-here
-```
-
-### Option 3: Deploy to Vercel
-
-1. Push to GitHub
-2. Import project in Vercel
-3. Add environment variable: `ANTHROPIC_API_KEY`
-4. Deploy
 
 ## Project Structure
 
